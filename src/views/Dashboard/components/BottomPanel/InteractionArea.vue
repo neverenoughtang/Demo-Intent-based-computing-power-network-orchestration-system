@@ -1,6 +1,23 @@
 <template>
   <TechCard title="意图输入区">
     <div class="chat-container">
+      <div class="scenario-switch">
+        <div 
+          class="switch-btn military" 
+          :class="{ active: simulationStore.currentScenario === 'military' }"
+          @click="simulationStore.setScenario('military')"
+        >
+          <el-icon><Aim /></el-icon> 军用场景
+        </div>
+        <div 
+          class="switch-btn civilian" 
+          :class="{ active: simulationStore.currentScenario === 'civilian' }"
+          @click="simulationStore.setScenario('civilian')"
+        >
+          <el-icon><Van /></el-icon> 民用场景
+        </div>
+      </div>
+
       <div class="messages-list">
         <div v-for="msg in chatStore.messages" :key="msg.id" class="msg-row">
           <span class="time">[{{ msg.time }}]</span>
@@ -17,7 +34,7 @@
         
         <el-input 
           v-model="inputText" 
-          placeholder="请输入作战意图，例如：'调度3架无人机前往(34.5, 112.3)灭火'..." 
+          placeholder="请输入作战意图..." 
           class="tech-input"
           @keyup.enter="handleSend"
         />
@@ -34,26 +51,62 @@
 import { ref } from 'vue';
 import TechCard from '@/components/common/TechCard.vue';
 import { useChatStore } from '@/store/useChatStore';
-import { Microphone, Paperclip, Promotion } from '@element-plus/icons-vue';
+import { useSimulationStore } from '@/store/useSimulationStore';
+import { Microphone, Paperclip, Promotion, Aim, Van } from '@element-plus/icons-vue';
 
 const chatStore = useChatStore();
+const simulationStore = useSimulationStore();
 const inputText = ref('');
 
 const handleSend = () => {
   if (!inputText.value.trim()) return;
   chatStore.addMessage({ role: 'user', content: inputText.value });
-  
-  // 模拟 AI 回复 (真实场景接后端)
   setTimeout(() => {
-    chatStore.addMessage({ role: 'ai', content: `正在解析意图: "${inputText.value}"... 资源匹配中` });
+    chatStore.addMessage({ role: 'ai', content: `[${simulationStore.currentScenario === 'military'?'军用':'民用'}] 意图解析中...` });
   }, 800);
-  
   inputText.value = '';
 };
 </script>
 
 <style scoped>
-.chat-container { display: flex; flex-direction: column; height: 100%; }
+.chat-container { display: flex; flex-direction: column; height: 100%; position: relative; }
+
+/* 场景切换按钮样式 */
+.scenario-switch {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: -45px; /* 移到 Card Title 右侧或上方 */
+  right: 10px;
+  z-index: 10;
+}
+.switch-btn {
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #888;
+  background: rgba(0,0,0,0.5);
+  display: flex; align-items: center; gap: 5px;
+  transition: all 0.3s;
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0% 100%); /* 斜角 */
+}
+.switch-btn:hover { background: rgba(255,255,255,0.1); }
+
+/* 激活状态 */
+.switch-btn.military.active {
+  background: rgba(255, 77, 79, 0.2);
+  border-color: #ff4d4f;
+  color: #ff4d4f;
+  box-shadow: 0 0 10px rgba(255, 77, 79, 0.3);
+}
+.switch-btn.civilian.active {
+  background: rgba(0, 216, 255, 0.2);
+  border-color: #00d8ff;
+  color: #00d8ff;
+  box-shadow: 0 0 10px rgba(0, 216, 255, 0.3);
+}
+
 .messages-list { 
   flex: 1; 
   overflow-y: auto; 

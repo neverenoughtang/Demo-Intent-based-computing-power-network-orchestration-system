@@ -3,7 +3,14 @@ import { ref, computed } from 'vue';
 import type { TopoNode, TopoLink, SubTask, HistoryExp } from '@/types/simulation';
 
 export const useSimulationStore = defineStore('simulation', () => {
-  // --- 1. 左侧数据 (保持不变) ---
+  // --- ✅ 新增：场景状态 (一定要补上这部分) ---
+  const currentScenario = ref<'military' | 'civilian'>('military'); 
+
+  const setScenario = (type: 'military' | 'civilian') => {
+    currentScenario.value = type;
+  };
+
+  // --- 1. 左侧数据 ---
   const tasks = ref<SubTask[]>([
     { id: '1', agentName: 'Agent-01', action: '意图解析', status: 'success' },
     { id: '2', agentName: 'Agent-02', action: '路径规划', status: 'fail' },
@@ -17,8 +24,7 @@ export const useSimulationStore = defineStore('simulation', () => {
     { id: 'h3', date: '2023-10-25', name: '高负荷压力测试', result: 'fail' },
   ]);
 
-  // --- 2. 核心拓扑数据 (来源于你提供的 JSON) ---
-  // 这里直接硬编码你给的 JSON，实际项目中可以通过 API 获取
+  // --- 2. 拓扑数据 ---
   const rawTopology = {
     hosts: {
       "D1h1": { type: "host", subtype: "ubuntu", x: 400, y: 375, interfaces: [{ ip: "192.168.1.10" }] },
@@ -49,25 +55,16 @@ export const useSimulationStore = defineStore('simulation', () => {
     }
   };
 
-  // --- Computed: 将对象转换为数组，方便前端遍历渲染 ---
   const topoNodes = computed<TopoNode[]>(() => {
-    const hosts = Object.entries(rawTopology.hosts).map(([key, val]) => ({
-      name: key,
-      ...val
-    }));
-    const routers = Object.entries(rawTopology.routers).map(([key, val]) => ({
-      name: key,
-      ...val
-    }));
+    const hosts = Object.entries(rawTopology.hosts).map(([key, val]) => ({ name: key, ...val }));
+    const routers = Object.entries(rawTopology.routers).map(([key, val]) => ({ name: key, ...val }));
     return [...hosts, ...routers] as TopoNode[];
   });
 
   const topoLinks = computed<TopoLink[]>(() => {
-    return Object.entries(rawTopology.links).map(([key, val]) => ({
-      name: key,
-      ...val
-    }));
+    return Object.entries(rawTopology.links).map(([key, val]) => ({ name: key, ...val }));
   });
 
-  return { tasks, historyList, topoNodes, topoLinks };
+  // ✅ 记得导出 currentScenario 和 setScenario！
+  return { tasks, historyList, nodes: topoNodes, topoNodes, topoLinks, currentScenario, setScenario };
 });
