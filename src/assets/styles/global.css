@@ -1,0 +1,29 @@
+/* 科技风全局变量定义 */
+:root {
+  --tech-bg-dark: #0b1120;       /* 深蓝底色 */
+  --tech-bg-panel: rgba(13, 27, 42, 0.85); /* 面板半透明背景 */
+  --tech-primary: #00d8ff;       /* 核心亮蓝 */
+  --tech-secondary: #2196f3;     /* 次级蓝 */
+  --tech-danger: #ff4d4f;        /* 报警红 */
+  --tech-success: #00ffc8;       /* 成功绿 */
+  --tech-border: rgba(33, 150, 243, 0.4); /* 边框色 */
+  --tech-text-main: #e0e0e0;
+  --tech-font-family: 'DIN Alternate', 'Roboto', sans-serif; /* 数字字体 */
+}
+
+body {
+  margin: 0;
+  background-color: var(--tech-bg-dark);
+  color: var(--tech-text-main);
+  font-family: 'Microsoft YaHei', sans-serif;
+  overflow: hidden; /* 大屏通常禁止滚动 */
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--tech-border);
+  border-radius: 3px;
+}
