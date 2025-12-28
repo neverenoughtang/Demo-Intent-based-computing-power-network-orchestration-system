@@ -23,13 +23,13 @@ const store = useSimulationStore();
   display: flex;
   justify-content: space-between;
   padding: 8px 10px;
-  font-size: 13px;
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.2s;
 }
 .history-item:hover { background: rgba(0, 216, 255, 0.1); }
 .date { color: #888; font-family: var(--tech-font-family); }
-.tag { padding: 2px 6px; border-radius: 2px; font-size: 12px; }
+.tag { padding: 2px 6px; border-radius: 2px; font-size: 16px; }
 .tag.pass { border: 1px solid var(--tech-success); color: var(--tech-success); }
 .tag.fail { border: 1px solid var(--tech-danger); color: var(--tech-danger); }
 </style>

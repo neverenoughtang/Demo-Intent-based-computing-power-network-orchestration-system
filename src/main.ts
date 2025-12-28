@@ -23,11 +23,11 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-// 5. 全局错误处理 (✅ 已添加类型注解，修复 TS7006)
-app.config.errorHandler = (err: unknown, instance: unknown, info: string) => {
-  console.error("🔥 捕获到 Vue 错误:", err);
-  console.error("错误位置:", info);
-};
+// // 5. 全局错误处理 (✅ 已添加类型注解，修复 TS7006)
+// app.config.errorHandler = (err: unknown, instance: unknown, info: string) => {
+//   console.error("🔥 捕获到 Vue 错误:", err);
+//   console.error("错误位置:", info);
+// };
 
 // 6. 挂载
 app.mount('#app')
